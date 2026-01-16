@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { parseFiltersFromSearchParams } from "@/lib/utils";
 import { useFiltersStore } from "@/store/useFiltersStore";
@@ -11,7 +11,7 @@ import SortDropdown from "@/components/sort-dropdown";
 import CoursesGrid from "@/components/courses-grid";
 import FiltersSync from "@/components/filters-sync";
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const hydrateFromUrl = useFiltersStore((state) => state.hydrateFromUrl);
 
@@ -44,5 +44,13 @@ export default function SearchPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="section-pad" />}>
+      <SearchPageContent />
+    </Suspense>
   );
 }

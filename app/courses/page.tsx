@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import CoursesGrid from "@/components/courses-grid";
 import FiltersPanel from "@/components/filters-panel";
 import FiltersSheet from "@/components/filters-sheet";
@@ -11,7 +11,7 @@ import { useFiltersStore } from "@/store/useFiltersStore";
 import { useSearchParams } from "next/navigation";
 import { parseFiltersFromSearchParams } from "@/lib/utils";
 
-export default function CoursesPage() {
+function CoursesPageContent() {
   const searchParams = useSearchParams();
   const hydrateFromUrl = useFiltersStore((state) => state.hydrateFromUrl);
 
@@ -44,5 +44,13 @@ export default function CoursesPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function CoursesPage() {
+  return (
+    <Suspense fallback={<div className="section-pad" />}>
+      <CoursesPageContent />
+    </Suspense>
   );
 }
